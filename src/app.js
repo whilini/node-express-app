@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const db = require("./model");
+const domainRouter = require("./domain");
+
+// db.sequelize.sync({ force: true });
 
 const isProd = process.env.NODE_ENV === "production"; // development, production, staging
 
@@ -33,15 +37,7 @@ if (!isProd) {
   );
 }
 
-app.get("/", (req, res, next) => {
-  try {
-    const msg = "Hello World";
-
-    return res.send(msg);
-  } catch (err) {
-    throw new Error(err);
-  }
-});
+app.use("/", domainRouter);
 
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
